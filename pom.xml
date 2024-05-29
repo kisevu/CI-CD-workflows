@@ -49,6 +49,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>ameda-cicd-workflow</finalName>
 	</build>
 
 </project>
