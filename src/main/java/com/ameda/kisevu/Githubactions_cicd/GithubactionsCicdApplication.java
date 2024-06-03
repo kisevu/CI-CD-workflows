@@ -24,15 +24,20 @@ import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.table_per_class
 import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.table_per_class.repo.MLRepo;
 import com.ameda.kisevu.Githubactions_cicd.namedQueries.entity.Author;
 import com.ameda.kisevu.Githubactions_cicd.namedQueries.repo.AuthorRepository;
+import com.ameda.kisevu.Githubactions_cicd.specification.entity.Person;
+import com.ameda.kisevu.Githubactions_cicd.specification.repo.PersonRepository;
+import com.ameda.kisevu.Githubactions_cicd.specification.specification.PersonSpecification;
 import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -42,17 +47,28 @@ public class GithubactionsCicdApplication {
 
 	@Bean
 	public CommandLineRunner commandLineRunner(
-			AuthorRepository authorRepository
+			PersonRepository personRepository
 	){
 		return args -> {
 			Faker faker = new Faker();
-			var author = Author.builder()
-					.authorName("ameda")
-					.dateRegistered(LocalDateTime.now())
+//			var author = Author.builder()
+//					.authorName("ameda")
+//					.dateRegistered(LocalDateTime.now())
+//					.build();
+//			authorRepository.save(author);
+//			author = authorRepository.findByNamedQuery(author.getId());
+//			authorRepository.updateByNamedQuery("oscar");
+			var person = Person.builder()
+					.name(faker.name().name())
+					.city(faker.nation().capitalCity())
+					.age(faker.number().numberBetween(10,25))
 					.build();
-			authorRepository.save(author);
-			author = authorRepository.findByNamedQuery(author.getId());
-			authorRepository.updateByNamedQuery("oscar");
+			personRepository.save(person);
+
+			Specification<Person> spec = Specification
+					.where(PersonSpecification.hasAge(15))
+					.and(PersonSpecification.nameLike("Tama Torp"));
+			List<Person> people = personRepository.findAll(spec);
 		};
 
 	}
