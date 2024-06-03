@@ -1,6 +1,10 @@
 package com.ameda.kisevu.Githubactions_cicd;
 
 
+import com.ameda.kisevu.Githubactions_cicd.composite_key.entity.Address;
+import com.ameda.kisevu.Githubactions_cicd.composite_key.entity.Order;
+import com.ameda.kisevu.Githubactions_cicd.composite_key.entity.OrderId;
+import com.ameda.kisevu.Githubactions_cicd.composite_key.repo.OrderRepository;
 import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.joined_table.entity.Fish;
 import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.joined_table.entity.Kales;
 import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.joined_table.entity.Rice;
@@ -18,6 +22,10 @@ import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.table_per_class
 import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.table_per_class.entity.ML;
 import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.table_per_class.repo.AIRepo;
 import com.ameda.kisevu.Githubactions_cicd.hibernate.inheritance.table_per_class.repo.MLRepo;
+import com.ameda.kisevu.Githubactions_cicd.namedQueries.entity.Author;
+import com.ameda.kisevu.Githubactions_cicd.namedQueries.repo.AuthorRepository;
+import com.github.javafaker.Faker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,26 +37,24 @@ import java.time.LocalDateTime;
 
 @SpringBootApplication
 @RestController
+@Slf4j
 public class GithubactionsCicdApplication {
 
 	@Bean
 	public CommandLineRunner commandLineRunner(
-			MLRepo mlRepo,
-			AIRepo aiRepo
+			AuthorRepository authorRepository
 	){
 		return args -> {
-			var ai = AI.builder()
-					.description("Artificial Intelligence")
-					.setAt(LocalDateTime.now())
+			Faker faker = new Faker();
+			var author = Author.builder()
+					.authorName("ameda")
+					.dateRegistered(LocalDateTime.now())
 					.build();
-			aiRepo.save(ai);
-
-			var ml = ML.builder()
-					.description("Machine Learning")
-					.setAt(LocalDateTime.now())
-					.build();
-			mlRepo.save(ml);
+			authorRepository.save(author);
+			author = authorRepository.findByNamedQuery(author.getId());
+			authorRepository.updateByNamedQuery("oscar");
 		};
+
 	}
 
 	public static void main(String[] args) {

@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@PrimaryKeyJoinColumn( name = "proteins")
+@PrimaryKeyJoinColumn( name = "carbs")
 public class Fish extends Food{
     private String foodType;
 }

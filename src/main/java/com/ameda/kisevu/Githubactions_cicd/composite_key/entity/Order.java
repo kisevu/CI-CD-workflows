@@ -6,6 +6,7 @@ package com.ameda.kisevu.Githubactions_cicd.composite_key.entity;/*
 */
 
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -24,4 +25,7 @@ public class Order {
     @EmbeddedId
     private OrderId id;
     private String orderInfo;
+    private int numberOfOrders;
+    @Embedded
+    private Address address;
 }
